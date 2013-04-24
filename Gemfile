@@ -1,4 +1,7 @@
 source 'https://rubygems.org'
+
+ruby '1.9.3-p392'
+
 gem 'rails', '4.0.0.beta1'
 
 gem 'activesupport', '4.0.0.beta1'
