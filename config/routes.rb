@@ -1,4 +1,12 @@
 Eathub::Application.routes.draw do
+
+  root :to => 'eathub#index'
+  resources :eathub do
+    collection do
+      get 'get_by_lat_lng'
+      get 'get_by_freeword'
+    end
+  end
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

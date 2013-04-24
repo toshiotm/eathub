@@ -1,0 +1,83 @@
+¥/* for releaseed web-kit style */
+* {
+	margin: 0;
+	padding: 0;
+}
+
+/* searched result for shop name*/
+.sname {
+	font-size: 13px;
+}
+
+body {
+	height: 100%;
+	background: white;
+}
+
+#scroll_area {
+	width: 880px;
+	margin: 0 auto;
+}
+
+/* #search_area {
+	width: 80%;
+ }*/
+
+#map {
+	width: 800px;
+	height: 500px;
+}
+
+/* site logo1 */
+@mixin logofont {
+	font: {
+		family: "Helvetica";
+		size: 50px;
+	}
+}
+.logo1 {
+	@include logofont;
+}
+ 
+ .logo2 {
+ 	@include logofont;
+ 	size: 25px;
+ }
+
+ /* site description */
+ .description {
+ 	font-size: 15px;
+ }
+
+
+/* key word input area */
+ #key_word {
+ 	width: 300px;
+ 	font-size: 15px;
+ }
+
+/* 
+ show search next page.
+*/
+#overlay {
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	display: none;
+	position: fixed;
+	background-color: #eee;
+	/* 透明度を指定します。 */
+	filter: alpha(opacity=20);
+	opacity: 0.2;
+}
+
+#loading {
+	//top: 0;
+	//left: 0;
+	//width: 100%;
+	//height: 100%;
+	margin-top: -50px;
+	display: none;
+	position: relative;
+}

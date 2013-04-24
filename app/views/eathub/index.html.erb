@@ -1,0 +1,217 @@
+<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?libraries=places&sensor=false"></script>
+<div id="scroll_area">
+	<section id="search_area">
+		<div class="logo1">EatHub</div>
+		<div class="description">飲食店総合検索サイト</div>
+		<input type="text" id="key_word" placeholder="検索条件">
+		<button type="button" id="search_button">検索</button>
+	</section>
+	<section>
+		<div>
+			<div id="map"></div>
+		</div>
+	</section>
+	<section>
+		<div id="counts"></div>
+		<div id="next_start"></div>
+	</section>
+	<section>
+		<div id="main" role="main">
+			<ul id="tiles"></ul>
+		</div>
+		<div id="loading">
+			<%= image_tag("loading.gif") %>
+		</div>
+		<div id="overlay"></div>
+	</section>
+</div>
+
+<script type="text/javascript">
+var map, marker_list;
+var next_start;
+var isSeeking = false;
+marker_list = new google.maps.MVCArray();
+
+var info_window;
+
+$(function(){
+	var key_word = getKeyword();
+
+	if (key_word) {
+		$("#key_word").val(key_word);
+	}
+
+	hideLoading();
+
+});
+
+new_map = function(center, zoom) {
+		map = new google.maps.Map($("#map")[0], {
+		mapTypeId: google.maps.MapTypeId.ROADMAP
+		,disableDefaultUI: true
+		,center: center
+		,zoom: zoom
+	});
+	return map;
+}
+
+createMarker = function(shop) {
+
+	var marker = new google.maps.Marker({
+		position:  new google.maps.LatLng(shop.lat, shop.lng)
+		,map: map
+		,title: shop.name
+		,animation: google.maps.Animation.DROP
+	});
+	return marker;
+}
+
+clearMarker = function() {
+	marker_list.forEach(function(marker, idx){
+		marker.setMap(null);
+	});
+}
+
+addInfoWindow =　function(marker, shop) {
+	var contents = '<img src="' + shop.m + '"> <br>'
+	　 + '<a target="_blank" href="' + shop.pc + '">' + shop.name + '</a> <br>' + '<p style="font-size: 12px;">Powered by<a href="http://webservice.recruit.co.jp/">ホットペッパー Webサービス</a></p>';
+
+	google.maps.event.addListener(marker, 'click', function(){
+		if (info_window) info_window.close();
+		info_window = new google.maps.InfoWindow({
+			content: contents
+		});
+		info_window.open(map, marker);
+	});
+}
+
+createPanToMapOptions = function() {
+	var options = {
+			zoom: 16
+		};
+	return options;
+}
+
+createShopDetail = function(obj, shop) {
+	obj.append($('<li></li>')
+		.append('<img src="' + shop.m + '">')
+		.append('<a class="sname" target="_blank" href="' + shop.pc + '">' + shop.name + '</a><br>')
+		.append('<p><a href="http://webservice.recruit.co.jp/"><img src="http://webservice.recruit.co.jp/banner/hotpepper-s.gif" alt="ホットペッパー Webサービス" width="135" height="17" border="0" title="ホットペッパー Webサービス"></a></p>')
+		);
+}
+
+tiling = function() {
+
+	var options = {
+	// autoResize: true
+	container: $('#main')
+	, offset: 10
+	, itemWidth: 200
+	, flexibleWidth: 0
+	};
+
+	var handler = $('#tiles li');
+	handler.wookmark(options);
+
+}
+
+
+dropMarkers = function(data) {
+	var option_data = JSON.parse(JSON.stringify(data));
+	var shops = option_data.shops;
+	var shop;
+	for(var i=0; i<shops.length; i++) {
+		shop = shops[i];
+		
+		var marker = createMarker(shop);
+		marker_list.push(marker);
+		addInfoWindow(marker, shop);
+
+		createShopDetail($("#tiles"),shop);
+	}
+
+	tiling();
+
+	$("#counts").html(option_data.counts);
+	next_start = option_data.next_start;
+
+	localStorage.setItem("page", option_data.page);
+	var center = new google.maps.LatLng(shops[0].lat, shops[0].lng);
+	map.setOptions(createPanToMapOptions());
+	map.panTo(center);
+}
+
+searchFreeWord = function(start) {
+	var key_word = $("#key_word").val();
+
+	if (key_word) {
+		isSeeking = true;
+		showLoading();
+		setKeyword(key_word);
+		$.get("/eathub/get_by_freeword.json/", {key_word: key_word, next_start: start}, 
+
+		function(data){
+			if(!map) {
+				map = new_map(new google.maps.LatLng(38, 138), 5);
+			}
+			dropMarkers(data);
+			isSeeking = false;
+			hideLoading();
+		});
+	}
+}
+
+showLoading = function () {
+	$("#loading").show();
+	$("#overlay").show();
+}
+
+hideLoading = function() {
+	$("#loading").hide();
+	$("#overlay").hide();
+}
+
+$(window).scroll(function() {
+
+    var bottom = $(window).scrollTop() + $(window).height();
+    var nextCallHeight = bottom + 100;
+
+    if (nextCallHeight >= $(document).height()) {
+
+        if (next_start != -1) {
+        	if (!isSeeking) {
+        		searchFreeWord(next_start);
+        	}
+        }
+    }
+});
+
+$(document).keypress(function(e){
+	if (e.which == 13) {
+		searchFreeWordAndClear();
+	}
+});
+
+$("#search_button").click(function() {
+	searchFreeWordAndClear();
+});
+
+searchFreeWordAndClear = function() {
+	clearMarker();
+	clearTiles();
+	searchFreeWord(1);
+}
+
+clearTiles = function () {
+	$("#tiles").empty();
+}
+
+setKeyword = function(key_word) {
+	localStorage.setItem("key_word", key_word);
+}
+
+getKeyword = function() {
+	return localStorage.getItem("key_word");
+}
+
+</script>	
