@@ -135,6 +135,8 @@ dropMarkers = function(data) {
 	$("#counts").html(option_data.counts);
 	next_start = option_data.next_start;
 
+	alert("検索結果：" + option_data.counts);
+
 	localStorage.setItem("page", option_data.page);
 	var center = new google.maps.LatLng(shops[0].lat, shops[0].lng);
 	map.setOptions(createPanToMapOptions());
