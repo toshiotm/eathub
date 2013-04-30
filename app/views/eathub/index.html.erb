@@ -135,8 +135,6 @@ dropMarkers = function(data) {
 	$("#counts").html(option_data.counts);
 	next_start = option_data.next_start;
 
-	alert("検索結果：" + option_data.counts);
-
 	localStorage.setItem("page", option_data.page);
 	var center = new google.maps.LatLng(shops[0].lat, shops[0].lng);
 	map.setOptions(createPanToMapOptions());
@@ -150,15 +148,21 @@ searchFreeWord = function(start) {
 		isSeeking = true;
 		showLoading();
 		setKeyword(key_word);
-		$.get("/eathub/get_by_freeword.json/", {key_word: key_word, next_start: start}, 
-
-		function(data){
-			if(!map) {
-				map = new_map(new google.maps.LatLng(38, 138), 5);
+		$.ajax({
+			type:"GET"
+			,url:"/eathub/get_by_freeword.json/"
+			,data:"key_word=" + key_word + "&next_start=" + start
+			,success: function(data, dataType){
+				if(!map) {
+					map = new_map(new google.maps.LatLng(38, 138), 5);
+				}
+				dropMarkers(data);
+				isSeeking = false;
+				hideLoading();
 			}
-			dropMarkers(data);
-			isSeeking = false;
-			hideLoading();
+			,error: function(XMLHttpRequest, textStatus, errorThrown){
+				alert(textStatus);
+			}
 		});
 	}
 }
