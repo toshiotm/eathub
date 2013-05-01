@@ -8,7 +8,7 @@
 	</section>
 	<section>
 		<div>
-			<div id="map"></div>
+			<div id="area"></div>
 		</div>
 	</section>
 	<section>
@@ -46,7 +46,7 @@ $(function(){
 });
 
 new_map = function(center, zoom) {
-		map = new google.maps.Map($("#map")[0], {
+		map = new google.maps.Map($("#area")[0], {
 		mapTypeId: google.maps.MapTypeId.ROADMAP
 		,disableDefaultUI: true
 		,center: center
@@ -72,9 +72,9 @@ clearMarker = function() {
 	});
 }
 
-addInfoWindow =　function(marker, shop) {
+addInfoWindow = function(marker, shop) {
 	var contents = '<img src="' + shop.m + '"> <br>'
-	　 + '<a target="_blank" href="' + shop.pc + '">' + shop.name + '</a> <br>' + '<p style="font-size: 12px;">Powered by<a href="http://webservice.recruit.co.jp/">ホットペッパー Webサービス</a></p>';
+	  + '<a target="_blank" href="' + shop.pc + '">' + shop.name + '</a> <br>' + '<p style="font-size: 12px;">Powered by<a href="http://webservice.recruit.co.jp/">ホットペッパー Webサービス</a></p>';
 
 	google.maps.event.addListener(marker, 'click', function(){
 		if (info_window) info_window.close();
