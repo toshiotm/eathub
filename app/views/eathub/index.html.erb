@@ -8,7 +8,7 @@
 	</section>
 	<section>
 		<div>
-			<div id="map"></div>
+			<div id="area"></div>
 		</div>
 	</section>
 	<section>
@@ -46,7 +46,7 @@ $(function(){
 });
 
 new_map = function(center, zoom) {
-		map = new google.maps.Map($("#map")[0], {
+		map = new google.maps.Map($("#area")[0], {
 		mapTypeId: google.maps.MapTypeId.ROADMAP
 		,disableDefaultUI: true
 		,center: center
@@ -134,8 +134,6 @@ dropMarkers = function(data) {
 
 	$("#counts").html(option_data.counts);
 	next_start = option_data.next_start;
-
-	alert("検索結果：" + option_data.counts);
 
 	localStorage.setItem("page", option_data.page);
 	var center = new google.maps.LatLng(shops[0].lat, shops[0].lng);
