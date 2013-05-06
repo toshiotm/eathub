@@ -35,10 +35,9 @@ marker_list = new google.maps.MVCArray();
 var info_window;
 
 $(function(){
-	var key_word = getKeyword();
 
-	if (key_word) {
-		$("#key_word").val(key_word);
+	if (marker_list.getLength() == 0) {
+		map = new_map(new google.maps.LatLng(38, 138), 5);
 	}
 
 	hideLoading();
