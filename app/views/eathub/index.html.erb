@@ -71,9 +71,9 @@ clearMarker = function() {
 	});
 }
 
-addInfoWindow =　function(marker, shop) {
+addInfoWindow = function(marker, shop) {
 	var contents = '<img src="' + shop.m + '"> <br>'
-	　 + '<a target="_blank" href="' + shop.pc + '">' + shop.name + '</a> <br>' + '<p style="font-size: 12px;">Powered by<a href="http://webservice.recruit.co.jp/">ホットペッパー Webサービス</a></p>';
+	  + '<a target="_blank" href="' + shop.pc + '">' + shop.name + '</a> <br>' + '<p style="font-size: 12px;">Powered by<a href="http://webservice.recruit.co.jp/">ホットペッパー Webサービス</a></p>';
 
 	google.maps.event.addListener(marker, 'click', function(){
 		if (info_window) info_window.close();
@@ -147,15 +147,21 @@ searchFreeWord = function(start) {
 		isSeeking = true;
 		showLoading();
 		setKeyword(key_word);
-		$.get("/eathub/get_by_freeword.json/", {key_word: key_word, next_start: start}, 
-
-		function(data){
-			if(!map) {
-				map = new_map(new google.maps.LatLng(38, 138), 5);
+		$.ajax({
+			type:"GET"
+			,url:"/eathub/get_by_freeword.json/"
+			,data:"key_word=" + key_word + "&next_start=" + start
+			,success: function(data, dataType){
+				if(!map) {
+					map = new_map(new google.maps.LatLng(38, 138), 5);
+				}
+				dropMarkers(data);
+				isSeeking = false;
+				hideLoading();
 			}
-			dropMarkers(data);
-			isSeeking = false;
-			hideLoading();
+			,error: function(XMLHttpRequest, textStatus, errorThrown){
+				alert(textStatus);
+			}
 		});
 	}
 }
