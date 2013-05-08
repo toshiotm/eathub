@@ -7,9 +7,7 @@
 		<button type="button" id="search_button">検索</button>
 	</section>
 	<section>
-		<div>
-			<div id="area"></div>
-		</div>
+		<div id="area"></div>
 	</section>
 	<section>
 		<div id="counts"></div>
@@ -102,8 +100,8 @@ createShopDetail = function(obj, shop) {
 tiling = function() {
 
 	var options = {
-	// autoResize: true
-	container: $('#main')
+	autoResize: true
+	, container: $('#main')
 	, offset: 10
 	, itemWidth: 200
 	, flexibleWidth: 0
