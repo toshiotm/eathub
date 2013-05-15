@@ -107,9 +107,9 @@ tiling = function() {
 	, flexibleWidth: 0
 	};
 
-	var handler = $('#tiles li');
-	handler.wookmark(options);
-
+	$('#tiles').imagesLoaded(function(){
+		$('#tiles li').wookmark(options);
+	});
 }
 
 
