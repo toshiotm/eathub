@@ -4,13 +4,14 @@
 		<div class="logo1">EatHub</div>
 		<div class="description">飲食店総合検索サイト</div>
 		<input type="text" id="key_word" placeholder="検索条件">
-		<button type="button" id="search_button">検索</button>
+		<button type="button" id="search_button">検索</button><br>
+		<div id="counts"></div>
+		<a href="#" id="more">more</a>
 	</section>
 	<section>
 		<div id="area"></div>
 	</section>
 	<section>
-		<div id="counts"></div>
 		<div id="next_start"></div>
 	</section>
 	<section>
@@ -39,6 +40,7 @@ $(function(){
 	}
 
 	hideLoading();
+	hideMore();
 
 });
 
@@ -129,8 +131,15 @@ dropMarkers = function(data) {
 
 	tiling();
 
-	$("#counts").html(option_data.counts);
 	next_start = option_data.next_start;
+
+	if(next_start == -1) {
+		hideMore();
+		showMaxFraction(option_data.counts);
+	} else {
+		 showMore();
+		 showFraction(option_data.counts);
+	}
 
 	localStorage.setItem("page", option_data.page);
 	var center = new google.maps.LatLng(shops[0].lat, shops[0].lng);
@@ -173,6 +182,18 @@ hideLoading = function() {
 	$("#loading").hide();
 	$("#overlay").hide();
 }
+hideMore = function() {
+	$("#more").hide();
+}
+showMore = function() {
+	$("#more").show();
+}
+showFraction = function(counts) {
+	$("#counts").html(next_start).append("/").append(counts).append("件");
+}
+showMaxFraction = function(counts) {
+	$("#counts").html(counts).append("/").append(counts).append("件");
+}
 
 $(window).scroll(function() {
 
@@ -180,19 +201,27 @@ $(window).scroll(function() {
     var nextCallHeight = bottom + 100;
 
     if (nextCallHeight >= $(document).height()) {
-
-        if (next_start != -1) {
-        	if (!isSeeking) {
-        		searchFreeWord(next_start);
-        	}
-        }
+		searchNextFreeWord();
     }
 });
+
+searchNextFreeWord = function () {
+    if (next_start != -1) {
+		if (!isSeeking) {
+			searchFreeWord(next_start);
+		}
+	}
+}
 
 $(document).keypress(function(e){
 	if (e.which == 13) {
 		searchFreeWordAndClear();
 	}
+});
+
+$("#more").click(function() {
+	searchNextFreeWord();
+	return false;
 });
 
 $("#search_button").click(function() {
