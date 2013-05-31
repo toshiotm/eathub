@@ -16,6 +16,7 @@ class Hotpepper < ActiveResource::Base
 				:lat => "#{lat}",
 				:lng => "#{lng}",
 				:start => "#{start}",
+				:range => "5",
 				:format => "json"
 				})
 	end
