@@ -7,7 +7,7 @@ class Hotpepper < ActiveResource::Base
 	API_KEY = 	"7b2c7f5d7c4cdff6"
 	HOTPEPPER_PATH = "/hotpepper/gourmet/v1/"
 
-	def self.search_shop(lat, lng)
+	def self.search_location(lat, lng, start=1)
 		self.find(
 			:one,
 			:from => HOTPEPPER_PATH,
@@ -15,6 +15,7 @@ class Hotpepper < ActiveResource::Base
 				:key => "#{API_KEY}",
 				:lat => "#{lat}",
 				:lng => "#{lng}",
+				:start => "#{start}",
 				:format => "json"
 				})
 	end

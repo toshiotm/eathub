@@ -7,6 +7,7 @@
 		<button type="button" id="search_button">検索</button><br>
 		<div id="counts"></div>
 		<a href="#" id="more">more</a>
+		<a href="#" id="geolocation">現在位置から検索する</a>
 	</section>
 	<section>
 		<div id="area"></div>
@@ -42,7 +43,16 @@ $(function(){
 	hideLoading();
 	hideMore();
 
+	canUseGeoLocation();
 });
+
+canUseGeoLocation = function() {
+	if (navigator.geolocation) {
+		$("#geolocation").show();
+	} else {
+		$("#geolocation").hide();
+	}
+}
 
 new_map = function(center, zoom) {
 		map = new google.maps.Map($("#area")[0], {
@@ -147,7 +157,7 @@ dropMarkers = function(data) {
 	map.panTo(center);
 }
 
-searchFreeWord = function(start) {
+searchByFreeWord = function(start) {
 	var key_word = $("#key_word").val();
 
 	if (key_word) {
@@ -171,6 +181,27 @@ searchFreeWord = function(start) {
 			}
 		});
 	}
+}
+
+searchByLocation = function(lat, lng, start) {
+	isSeeking = true;
+	showLoading();
+	$.ajax({
+		type:"GET"
+		,url:"/eathub/get_by_location.json/"
+		,data:"lat=" + lat +  "&lng=" + lng + "&next_start=" + start
+		,success: function(data, dataType){
+			if(!map) {
+				map = new_map(new google.maps.LatLng(38, 138), 5);
+			}
+			dropMarkers(data);
+			isSeeking = false;
+			hideLoading();
+		}
+		,error: function(XMLHttpRequest, textStatus, errorThrown){
+			alert(textStatus);
+		}
+	});
 }
 
 showLoading = function () {
@@ -208,30 +239,73 @@ $(window).scroll(function() {
 searchNextFreeWord = function () {
     if (next_start != -1) {
 		if (!isSeeking) {
-			searchFreeWord(next_start);
+			searchByFreeWord(next_start);
 		}
 	}
 }
 
 $(document).keypress(function(e){
 	if (e.which == 13) {
-		searchFreeWordAndClear();
+		searchByFreeWordAndClear();
 	}
 });
 
 $("#more").click(function() {
-	searchNextFreeWord();
+
+	if(getKeyword()) {
+		// by keyword searching
+		searchNextFreeWord();
+	} else {
+		// by geo searching
+	}
 	return false;
 });
 
 $("#search_button").click(function() {
-	searchFreeWordAndClear();
+	searchByFreeWordAndClear();
 });
 
-searchFreeWordAndClear = function() {
+$("#geolocation").click(function(){
+	searchByLocationAndClear();
+});
+
+searchByLocationAndClear = function() {
+	clearKeywords();
 	clearMarker();
 	clearTiles();
-	searchFreeWord(1);
+
+	navigator.geolocation.getCurrentPosition(
+		function(pos) {
+			var lat = pos.coords.latitude;
+			var lng = pos.coords.longitude;
+			searchByLocation(lat, lng, 1);
+		}
+		, function (error) {
+			var err_msg = "";
+			switch(error.code) {
+			case 1:
+				err_msg = "位置情報の利用が許可されていません";
+				break;
+			case 2:
+				err_msg = "デバイスの位置が判定できません";
+				break;
+			case 3:
+				err_msg = "タイムアウトしました";
+				break;
+			}
+			alert(err_msg);
+		}
+	);
+}
+
+searchByFreeWordAndClear = function() {
+	clearMarker();
+	clearTiles();
+	searchByFreeWord(1);
+}
+
+clearKeywords = function() {
+	$("key_word").val("");
 }
 
 clearTiles = function () {
