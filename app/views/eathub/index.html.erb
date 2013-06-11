@@ -10,14 +10,18 @@
 		<a href="#" id="geolocation">現在位置から検索する</a>
 	</section>
 	<section>
-		<div id="area"></div>
-	</section>
+		<div id="area">
+		</div>
 	<section>
 		<div id="next_start"></div>
 	</section>
 	<section>
 		<div id="main" role="main">
-			<ul id="tiles"></ul>
+			<div id="abv">
+			<a href="http://px.a8.net/svt/ejp?a8mat=25RAHH+4KX3CI+1XGK+6S6AM9" target="_blank"><img border="0" width="350" height="240" alt="" src="http://www22.a8.net/svt/bgt?aid=130603733277&wid=001&eno=01&mid=s00000009002041012000&mc=1"></a><img border="0" width="1" height="1" src="http://www17.a8.net/0.gif?a8mat=25RAHH+4KX3CI+1XGK+6S6AM9" alt="">
+		</div>
+			<ul id="tiles">
+			</ul>
 		</div>
 		<div id="loading">
 			<%= image_tag("loading.gif") %>
@@ -30,6 +34,7 @@
 var map, marker_list;
 var next_start;
 var isSeeking = false;
+var position;
 marker_list = new google.maps.MVCArray();
 
 var info_window;
@@ -82,8 +87,9 @@ clearMarker = function() {
 }
 
 addInfoWindow = function(marker, shop) {
+
 	var contents = '<img src="' + shop.m + '"> <br>'
-	  + '<a target="_blank" href="' + shop.pc + '">' + shop.name + '</a> <br>' + '<p style="font-size: 12px;">Powered by<a href="http://webservice.recruit.co.jp/">ホットペッパー Webサービス</a></p>';
+	  + '<a target="_blank" href="' + shop.pc + '">' + shop.name + '</a> <br>' + '<p style="font-size: 10px;">Powered by<a href="http://webservice.recruit.co.jp/">ホットペッパー Webサービス</a></p>';
 
 	google.maps.event.addListener(marker, 'click', function(){
 		if (info_window) info_window.close();
@@ -244,6 +250,16 @@ searchNextFreeWord = function () {
 	}
 }
 
+searchByNextLocation = function () {
+    if (next_start != -1) {
+		if (!isSeeking) {
+			var lat = position.coords.latitude;
+			var lng = position.coords.longitude;
+			searchByLocation(lat, lng, next_start);
+		}
+	}
+}
+
 $(document).keypress(function(e){
 	if (e.which == 13) {
 		searchByFreeWordAndClear();
@@ -257,6 +273,7 @@ $("#more").click(function() {
 		searchNextFreeWord();
 	} else {
 		// by geo searching
+		searchByNextLocation();
 	}
 	return false;
 });
@@ -276,8 +293,10 @@ searchByLocationAndClear = function() {
 
 	navigator.geolocation.getCurrentPosition(
 		function(pos) {
+			position = pos;
 			var lat = pos.coords.latitude;
 			var lng = pos.coords.longitude;
+
 			searchByLocation(lat, lng, 1);
 		}
 		, function (error) {
@@ -295,6 +314,7 @@ searchByLocationAndClear = function() {
 			}
 			alert(err_msg);
 		}
+		, {enableHighAccuracy:true}
 	);
 }
 
@@ -306,6 +326,7 @@ searchByFreeWordAndClear = function() {
 
 clearKeywords = function() {
 	$("key_word").val("");
+	setKeyword("");
 }
 
 clearTiles = function () {
