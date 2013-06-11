@@ -6,6 +6,8 @@ gem 'rails', '4.0.0.beta1'
 
 gem 'activesupport', '4.0.0.beta1'
 
+gem 'newrelic_rpm'
+
 group :production do
      gem 'pg'
 end

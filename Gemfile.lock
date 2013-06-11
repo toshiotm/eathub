@@ -64,6 +64,7 @@ GEM
     mime-types (1.23)
     minitest (4.7.3)
     multi_json (1.7.2)
+    newrelic_rpm (3.6.3.111)
     pg (0.15.1)
     polyglot (0.3.3)
     pry (0.9.12.1)
@@ -141,6 +142,7 @@ DEPENDENCIES
   jbuilder (~> 1.0.1)
   jquery-rails
   multi_json
+  newrelic_rpm
   pg
   pry
   pry-doc
