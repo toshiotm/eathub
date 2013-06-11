@@ -8,6 +8,8 @@ gem 'activesupport', '4.0.0.beta1'
 
 gem 'newrelic_rpm'
 
+gem 'unicorn'
+
 group :production do
      gem 'pg'
 end
