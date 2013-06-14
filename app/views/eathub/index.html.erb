@@ -134,6 +134,9 @@ tiling = function() {
 dropMarkers = function(data) {
 	var option_data = JSON.parse(JSON.stringify(data));
 	var shops = option_data.shops;
+
+	if (shops.length == 0) {return;}
+
 	var shop;
 	for(var i=0; i<shops.length; i++) {
 		shop = shops[i];
@@ -243,7 +246,7 @@ $(window).scroll(function() {
 });
 
 searchNextFreeWord = function () {
-    if (next_start != -1) {
+    if (next_start && next_start != -1) {
 		if (!isSeeking) {
 			searchByFreeWord(next_start);
 		}
@@ -251,7 +254,7 @@ searchNextFreeWord = function () {
 }
 
 searchByNextLocation = function () {
-    if (next_start != -1) {
+    if (next_start && next_start != -1) {
 		if (!isSeeking) {
 			var lat = position.coords.latitude;
 			var lng = position.coords.longitude;
