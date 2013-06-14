@@ -187,6 +187,8 @@ searchByFreeWord = function(start) {
 			}
 			,error: function(XMLHttpRequest, textStatus, errorThrown){
 				alert(textStatus);
+				isSeeking = false;
+				hideLoading();
 			}
 		});
 	}
