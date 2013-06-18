@@ -34,6 +34,7 @@
 var map, marker_list;
 var next_start;
 var isSeeking = false;
+var canPanTo = true;
 var position;
 marker_list = new google.maps.MVCArray();
 
@@ -163,7 +164,11 @@ dropMarkers = function(data) {
 	localStorage.setItem("page", option_data.page);
 	var center = new google.maps.LatLng(shops[0].lat, shops[0].lng);
 	map.setOptions(createPanToMapOptions());
-	map.panTo(center);
+
+	if (canPanTo) {
+		map.panTo(center);
+		canPanTo = false;
+	}
 }
 
 searchByFreeWord = function(start) {
@@ -295,7 +300,7 @@ searchByLocationAndClear = function() {
 	clearKeywords();
 	clearMarker();
 	clearTiles();
-
+	canPanTo = true;
 	navigator.geolocation.getCurrentPosition(
 		function(pos) {
 			position = pos;
@@ -326,6 +331,7 @@ searchByLocationAndClear = function() {
 searchByFreeWordAndClear = function() {
 	clearMarker();
 	clearTiles();
+	canPanTo = true;
 	searchByFreeWord(1);
 }
 
