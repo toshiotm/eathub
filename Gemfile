@@ -38,3 +38,12 @@ group :development do
 	gem 'pry-doc'
 	gem 'pry-rails'
 end
+
+gem 'mobylette'
+
+group :assets do
+ gem 'chardinjs-rails'
+end
+
+
+

@@ -1,11 +1,12 @@
 require 'json'
 class EathubController < ApplicationController
+	include Mobylette::RespondToMobileRequests
 
 	def index
 	end
 
 	#  call get_by_freeword method when user click search button
-	#  and update area is map and image list too.
+	#and update area is map and image list too.
 	#  ex)
 	# GET /shophub/get_by_freeword?key_word=xxx
 	# i wont to add directive for infinit scroll.

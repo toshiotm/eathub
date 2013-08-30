@@ -37,6 +37,9 @@ GEM
     arel (4.0.0)
     atomic (1.1.9)
     builder (3.1.4)
+    chardinjs-rails (0.1.2)
+      sass-rails (>= 3.2)
+      thor (~> 0.14)
     coderay (1.0.9)
     coffee-rails (4.0.0)
       coffee-script (>= 2.2.0)
@@ -63,6 +66,8 @@ GEM
     method_source (0.8.1)
     mime-types (1.23)
     minitest (4.7.4)
+    mobylette (3.4.1)
+      actionpack (>= 3.0)
     multi_json (1.7.7)
     newrelic_rpm (3.6.3.111)
     pg (0.15.1)
@@ -142,9 +147,11 @@ PLATFORMS
 DEPENDENCIES
   activeresource!
   activesupport (= 4.0.0.beta1)
+  chardinjs-rails
   coffee-rails (~> 4.0.0.beta1)
   jbuilder (~> 1.0.1)
   jquery-rails
+  mobylette
   multi_json
   newrelic_rpm
   pg

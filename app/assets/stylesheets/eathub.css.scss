@@ -25,7 +25,7 @@ body {
 }
 
 #area {
-	width: 90%;
+	width: 100%;
 	height: 480px;
 }
 
@@ -36,6 +36,11 @@ body {
 		size: 50px;
 	}
 }
+
+.clear {
+	clear:both;
+}
+
 .logo1 {
 	@include logofont;
 }
@@ -43,6 +48,11 @@ body {
  .logo2 {
  	@include logofont;
  	size: 25px;
+ }
+
+ .help {
+ text-align: right;
+ float: left;
  }
 
  /* site description */
