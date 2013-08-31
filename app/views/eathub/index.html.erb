@@ -4,7 +4,7 @@
 		<div class="help"><button id="help">help</button></div>
 		<div class="description">飲食店総合検索サイト</div>
 		<div class="clear"></div>
-		<input type="text" id="key_word" placeholder="検索条件" data-intro="検索条件を複数指定する場合は、空白でつなげて下さい。" data-position="right">
+		<input type="text" id="key_word" placeholder="検索条件">
 		<button type="button" id="search_button">検索</button><br>
 		<div id="counts"></div>
 		<a href="#" id="more">more</a>
@@ -18,9 +18,6 @@
 	</section>
 	<section>
 		<div id="main" role="main">
-			<div id="abv">
-			<a href="http://px.a8.net/svt/ejp?a8mat=25RAHH+4KX3CI+1XGK+6S6AM9" target="_blank"><img border="0" width="350" height="240" alt="" src="http://www22.a8.net/svt/bgt?aid=130603733277&wid=001&eno=01&mid=s00000009002041012000&mc=1"></a><img border="0" width="1" height="1" src="http://www17.a8.net/0.gif?a8mat=25RAHH+4KX3CI+1XGK+6S6AM9" alt="">
-		</div>
 			<ul id="tiles">
 			</ul>
 		</div>
@@ -56,10 +53,6 @@
 			searchByNextLocation();
 		}
 		return false;
-	});
-
-	$("#help").click(function() {
-		$("body").chardinJs("start");
 	});
 
 </script>	

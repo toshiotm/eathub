@@ -41,9 +41,6 @@ end
 
 gem 'mobylette'
 
-group :assets do
- gem 'chardinjs-rails'
-end
 
 
 
